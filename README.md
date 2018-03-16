@@ -43,33 +43,56 @@ Now that you can add posts, let's make the user able to delete and edit them.
 - Edit
   - In views, create `update.ejs` page that contains a form as follows: 
     - action `'/update/id'` and method `post`
-    - input field of type `text` with placeholder `"Title"`, a name `"title"`, and a value of the old title 
-    - textarea of type `text` with placeholder `"Text"`, a name `"text"`, rows `"5"`, cols `"50"`, and a value of the old text
+    - input field of type `text` with placeholder `"Title"`, name `"title"`, and value of the old title 
+    - textarea of type `text` with placeholder `"Text"`, name `"text"`, rows `"5"`, cols `"50"`, and value of the old text
     - input of type `submit`
   - Add an anchor `<a>` under each post of href `'edit/id' with id being the id of post selected`. *Remember that `MongoLab` sets a default id for each post* 
   - Handle this link in `server.js` using `app.post(/edit/:id)` where you find the post that the user looking for using *`findOne()`* function and render the result to `update.ejs`
-  - The form in update.ejs has `'/update/id'` as action, this should also be handled in `server.js` using `app.post(/update/:id)` Use *`findOneAndUpdate()`* function to set the values for `Title` and `Text`
+  - The form in `update.ejs` has `'/update/id'` as action, this should also be handled in `server.js` using `app.post(/update/:id)` Use *`findOneAndUpdate()`* function to set the new values for `Title` and `Text` as entered by the user
          
+  Congratulations! You can now Add, edit and delete posts from a database.
   
+## Sorting Posts
 
-#### title
+Now, the user shall be able to sort the posts by ID (default sorting), title (alphabetical order) or date.
+- Delete all your posts to avoid any type of conflict.
+- Go to `index.ejs` and add the following:
+    - An input field to the form of type `hidden` id `date` and name `date` 
+    - The following script
+    ```js
+    n = new Date(); // get current date
+    // formatting the date
+    h = n.getHours();
+    M = n.getMinutes();
+    y = n.getFullYear();
+    // getMonth() counts January as 0 so we need +1 
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    //check if it's AM or PM
+    if (h < 12){
+    document.getElementById("date").value = h + ":" + M + " AM " + m + "/" + d + "/" + y;
+    }
+    else {
+        document.getElementById("date").value = h + ":" + M + " PM " + m + "/" + d + "/" + y;
+    }
+    ```
+    This step allowed us to send the `date` when the post was added
+- Now, in `index.ejs` add 3 anchors `<a>` above the posts as follows:
+    - Sort by Id with `href = "/default"`
+    - Sort by Title with `href = "/title"`
+    - Sort by Date with `href = "/date"`
+- Handle these links in `server.js` by adding `:sorting?` to `app.get('/')`. The question mark means that this parameter is optional (not required). Using *`find()`* and *`sort()`* functions, sort the posts based on which anchor is pressed. 
 
-```js
-var a = 12
-```
+Congratulations! Your created a full CMS for a Blog.
 
-the variable `a` is equal to `12`
+## Optionals
 
+For those who want to have more fun, here are some additional tasks you might find interesting.
 
-*bold* _italics_ ~~strikethrough~~
+#### Read More
 
-[this is a link](http://www.google.com)
+Only display the first 3 words of each post on the `index.ejs` page and give the option for the user to read full post on another page `read.ejs`. Use *`split()`*, *`slice()`* and *`join()`* functions.
 
-list:
-- item1
-- item2
+#### Pagination
 
-ordered list:
-
-1. dfdsf
-2. dsfdsf
+Limit the number of posts displayed on one page to 3 posts. If there are additional posts, the user has the option to move between pages (there will be 2 anchors next and previous). Use *`limit()`* and *`skip()`* functions.
