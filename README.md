@@ -83,7 +83,7 @@ Now, the user shall be able to sort the posts by ID (default sorting), title (al
     - Sort by Date with `href = "/date"`
 - Handle these links in `server.js` by adding `:sorting?` to `app.get('/')`. The question mark means that this parameter is optional (not required). Using *`find()`* and *`sort()`* functions, sort the posts based on which anchor is pressed. 
 
-Congratulations! Your created a full CMS for a Blog.
+Congratulations! You created a full Blog.
 
 ## Optionals
 
